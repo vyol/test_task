@@ -3,9 +3,11 @@ from django.db import models
 # Create your models here.
 class Grup(models.Model):
     name = models.CharField(max_length=16, unique=True)
+    captain = models.ForeignKey('Student', related_name='captain',
+                                null=True, blank=True)
 
     def __unicode__(self):
-        return self.name + u''
+        return u'%s %s' % (self.name, self.captain)
 
 
 class Student(models.Model):
@@ -22,10 +24,3 @@ class Student(models.Model):
     class Meta:
         unique_together = [('surname', 'name', 'patronymic')]
 
-
-class Captain(models.Model):
-    grup = models.ForeignKey(Grup)
-    student = models.ForeignKey(Student)
-
-    def __unicode__(self):
-        return u'%s %s' % (self.grup, self.student)
