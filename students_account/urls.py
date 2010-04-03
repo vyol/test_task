@@ -4,8 +4,10 @@ from django.conf.urls.defaults import *
 from django.contrib import admin
 admin.autodiscover()
 
-urlpatterns = patterns('',
+urlpatterns = patterns('students_app.views',
     # Example:
+    (r'^groups/$', 'view_groups'),
+    (r'^students/(?P<group_name>(\w+))$', 'view_students'),
     # (r'^students_account/', include('students_account.foo.urls')),
 
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block extrascripts %}
+	<script>
+		function show_students(val) {
+			window.location = "/students/"+ val;
+		};
+	</script>
+{% endblock %}
+
+{% block content%}
+	<table>
+	{% for g in groups %}
+		<tr>
+			<td><a href="javascript:void(0);" onClick="javascript:show_students(this.innerHTML);">{{ g.name }}</a></td>
+			<td>{{ g.captain }}</td>		
+			<td>{{ g.students_amount }}</td>					
+		</tr>
+	{% endfor %}
+	</table>
+{% endblock %}
