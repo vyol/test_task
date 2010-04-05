@@ -32,12 +32,17 @@ def login(request):
         return display_login_form(request, ERROR_MESSAGE)
 
 
+def logout(request):
+    request.session.flush()
+    return HttpResponseRedirect('../index')
+
 def display_login_form(request, error_message='', extra_context=None):
     request.session.set_test_cookie()
     context = {
                'title': 'Log in',
                'app_path': request.get_full_path(),
-               'error_message': error_message
+               'error_message': error_message,
+               'is_login_page':True
                }
     context.update(extra_context or {})
     context_instance = RequestContext(request, current_app='students_app')
@@ -62,10 +67,12 @@ def view_groups(request):
                 print e
             form = GroupForm()
         return render_to_response('groups.html',
-                              {'groups':groups, 'form':form})
+                              {'groups':groups, 'form':form},
+                              context_instance=RequestContext(request))
     form = GroupForm()
     return render_to_response('groups.html',
-                              {'groups':groups, 'form':form})
+                              {'groups':groups, 'form':form},
+                              context_instance=RequestContext(request))
 
 
 @is_authenticated
@@ -85,10 +92,12 @@ def view_students(request, group_name):
                 print e
             form = StudentForm()
         return render_to_response('students.html',
-                              {'students':students, 'form':form})
+                              {'students':students, 'form':form},
+                              context_instance=RequestContext(request))
     form = StudentForm()
     return render_to_response('students.html',
-                              {'students':students, 'form':form})
+                              {'students':students, 'form':form},
+                              context_instance=RequestContext(request))
 
 
 @is_authenticated

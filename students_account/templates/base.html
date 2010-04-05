@@ -5,6 +5,9 @@
 	<link rel="stylesheet" type="text/css" href="../site_media/css/main.css"/>	
 </head>
 <body>
+	{%if not is_login_page %}
+		you are logged in as <b>{{user.username}}</b> | <a href="../logout/">log out</a>
+	{% endif %}
 	{% block content%}{% endblock %}
 </body>
 </html>

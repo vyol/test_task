@@ -65,11 +65,15 @@ AUTHENTICATION_BACKENDS = (
     'auth_backends.EmailModelBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
-
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.core.context_processors.auth',
+    'django.core.context_processors.request',
+)
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'middlewares.StatsMiddleware'
 )
 
 ROOT_URLCONF = 'students_account.urls'
