@@ -10,7 +10,7 @@
 			window.location = "/groups/delete/"+ pk;
 		};
 		function edit_group(e) {
-			var pk = e.parentNode.parentNode.cells[0].innerHTML;		
+			var pk = e.parentNode.parentNode.cells[0].innerHTML;	
 			var group_attr = new Array();
 			for (i=0; i<document.getElementById('group_form').length-1; i++){
 				document.getElementById('group_form')[i].value = e.parentNode.parentNode.cells[i+1].childNodes[0].innerHTML;

@@ -7,6 +7,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('students_app.views',
     # Example:
+    (r'^index/$', 'login'),
     (r'^groups/$', 'view_groups'),
     (r'^students/(?P<group_name>(\w+))$', 'view_students'),
     (r'^students/delete/(?P<student_pk>(\d+))$', 'delete_student'),
