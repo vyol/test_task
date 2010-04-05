@@ -2,20 +2,60 @@
 
 {% block extrascripts %}
 	<script>
-		function show_students(val) {
-			window.location = "/students/"+ val;
+		function show_students(group) {
+			window.location = "/students/"+ group;
 		};
+		function del_group(e) {
+			var pk = e.parentNode.parentNode.cells[0].innerHTML;
+			window.location = "/groups/delete/"+ pk;
+		};
+		function edit_group(e) {
+			var pk = e.parentNode.parentNode.cells[0].innerHTML;		
+			var group_attr = new Array();
+			for (i=0; i<document.getElementById('group_form').length-1; i++){
+				document.getElementById('group_form')[i].value = e.parentNode.parentNode.cells[i+1].childNodes[0].innerHTML;
+			}
+			var captain = e.parentNode.parentNode.cells[2].innerHTML;
+			document.getElementById('group_form')['captain'].selectedIndex=0;
+			for (i=0; i<document.getElementById('group_form')['captain'].options.length; i++){
+				if (document.getElementById('group_form')['captain'].options[i].text == captain) {
+					document.getElementById('group_form')['captain'].options[i].selected = true;
+					break;
+				}
+			}
+			document.getElementById('group_form')['pk'].value = pk;
+		};		
 	</script>
 {% endblock %}
 
 {% block content%}
-	<table>
+	<table cellpadding="4">
+	<tr>
+		<th>id</th>
+		<th>group</th>
+		<th>captain</th>		
+		<th>students_amount</th>				
+	</tr>	
 	{% for g in groups %}
 		<tr>
+			<td>{{ g.pk }}</td>				
 			<td><a href="javascript:void(0);" onClick="javascript:show_students(this.innerHTML);">{{ g.name }}</a></td>
 			<td>{{ g.captain }}</td>		
-			<td>{{ g.students_amount }}</td>					
+			<td>{{ g.students_amount }}</td>	
+			<td><a href="javascript:void(0);" onClick="javascript:del_group(this);">&nbsp;del&nbsp;</a></td>						
+			<td><a href="javascript:void(0);" onClick="javascript:edit_group(this);">&nbsp;edit&nbsp;</a></td>					
 		</tr>
 	{% endfor %}
 	</table>
+	{% if form.errors %}
+        <p style="color: red;">
+            Please correct the error{{ form.errors|pluralize }} below.
+        </p>
+    {% endif %}
+
+    <form method="POST" id="group_form">
+        {{form.as_p}}
+		<button type="reset">reset</button>		
+        <button type="submit">submit</button>
+    </form>	
 {% endblock %}

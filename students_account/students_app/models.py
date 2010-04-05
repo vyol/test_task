@@ -7,12 +7,12 @@ class Grup(models.Model):
                                 null=True, blank=True)
 
     def __unicode__(self):
-        return u'%s %s' % (self.name, self.captain)
+        return self.name + u''
 
 
 class Student(models.Model):
+    surname = models.CharField(max_length=32)    
     name = models.CharField(max_length=32)
-    surname = models.CharField(max_length=32)
     patronymic = models.CharField(max_length=32)
     birth_date = models.DateField()
     student_card = models.CharField(max_length=16)

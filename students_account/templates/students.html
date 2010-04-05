@@ -1,14 +1,67 @@
 {% extends 'base.html' %}
 
+{% block extrascripts %}
+	<script>
+		function del_student(e) {
+			var pk = e.parentNode.parentNode.cells[0].innerHTML;
+			window.location = "/students/delete/"+ pk;
+		};
+		function edit_student(e) {
+			var pk = e.parentNode.parentNode.cells[0].innerHTML;		
+			var student_attr = new Array();
+			for (i=0; i<document.getElementById('student_form').length-1; i++){
+				document.getElementById('student_form')[i].value = e.parentNode.parentNode.cells[i+1].innerHTML;
+			}
+			var group = e.parentNode.parentNode.cells[6].innerHTML;
+			for (i=0; i<document.getElementById('student_form')['grup'].options.length; i++){
+				if (document.getElementById('student_form')['grup'].options[i].text == group) {
+					document.getElementById('student_form')['grup'].options[i].selected = true;
+					break;
+				}
+			}
+			document.getElementById('student_form')['pk'].value = pk;
+		};		
+	</script>
+{% endblock %}
+
 {% block content%}
-	<table>
-	{% for s in students %}
-		<tr>
-			<td>{{ s.surname }}</td>				
-			<td>{{ s.name }}</td>
-			<td>{{ s.birth_date}}</td>
-			<td>{{ s.student_card}}</td>			
-		</tr>
-	{% endfor %}
+	<table cellpadding="4">
+	<tr>
+		<th>id</th>
+		<th>surname</th>
+		<th>name</th>		
+		<th>patronymic</th>				
+		<th>birth_date</th>		
+		<th>student_card</th>			
+		<th>group</th>
+	</tr>		
+	{% if students %}
+		{% for s in students %}
+			<tr>
+				<td>{{ s.pk }}</td>				
+				<td>{{ s.surname }}</td>				
+				<td>{{ s.name }}</td>
+				<td>{{ s.patronymic }}</td>			
+				<td>{{ s.birth_date }}</td>
+				<td>{{ s.student_card }}</td>			
+				<td>{{ s.grup }}</td>						
+				<td><a href="javascript:void(0);" onClick="javascript:del_student(this);">&nbsp;del&nbsp;</a></td>						
+				<td><a href="javascript:void(0);" onClick="javascript:edit_student(this);">&nbsp;edit&nbsp;</a></td>									
+			</tr>
+		{% endfor %}
+	{% else %}	
+		<tr><td colspan="9">Empty result</td></tr>
+	{% endif %}
 	</table>
+	
+	{% if form.errors %}
+        <p style="color: red;">
+            Please correct the errors below.
+        </p>
+    {% endif %}
+    <form method="POST" id="student_form">
+        {{form.as_p}}
+		<button type="reset">reset</button>		
+        <button type="submit">submit</button>
+    </form>
 {% endblock %}
