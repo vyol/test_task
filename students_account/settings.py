@@ -61,6 +61,10 @@ TEMPLATE_LOADERS = (
     'django.template.loaders.app_directories.load_template_source',
 #     'django.template.loaders.eggs.load_template_source',
 )
+AUTHENTICATION_BACKENDS = (
+    'auth_backends.EmailModelBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',

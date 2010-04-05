@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User, UserManager
 from django.db import models
 
 # Create your models here.
@@ -11,7 +12,7 @@ class Grup(models.Model):
 
 
 class Student(models.Model):
-    surname = models.CharField(max_length=32)    
+    surname = models.CharField(max_length=32)
     name = models.CharField(max_length=32)
     patronymic = models.CharField(max_length=32)
     birth_date = models.DateField()
@@ -23,4 +24,3 @@ class Student(models.Model):
 
     class Meta:
         unique_together = [('surname', 'name', 'patronymic')]
-
