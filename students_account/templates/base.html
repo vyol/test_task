@@ -6,8 +6,11 @@
 </head>
 <body>
 	{%if not is_login_page %}
-		you are logged in as <b>{{user.username}}</b> | <a href="../logout/">log out</a>
+		you are logged in as <b>{{user.username}}</b> | <a href="../logout/">log out</a> 
 	{% endif %}
 	{% block content%}{% endblock %}
+	{% if django_settings.DEBUG %}
+		<hr /><b>debug: </b>
+	{% endif %}
 </body>
 </html>

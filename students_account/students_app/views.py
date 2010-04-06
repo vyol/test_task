@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect
 from django.db.models import Count
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from students_app.context_processors import settings_proc
 from students_app.models import Grup, Student
 from students_app.forms import GroupForm, StudentForm
 from students_app.utils.main_utils import is_authenticated

@@ -1,6 +1,5 @@
 import re
 from django.db import connection
-from operator import add
 from time import time
 
 class StatsMiddleware(object):
@@ -23,7 +22,7 @@ class StatsMiddleware(object):
         queries_amount = len(connection.queries) - n
         stats = {'total_time': total_time,
                  'queries': queries_amount}
-        out = "<hr />total time: %(total_time).5fs, queries: %(queries)d" % stats
+        out = "total time: %(total_time).5fs, queries: %(queries)d" % stats
         if response and response.content \
             and response['Content-Type'].find('text/html') != -1:
             s = response.content

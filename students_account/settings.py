@@ -68,6 +68,7 @@ AUTHENTICATION_BACKENDS = (
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.auth',
     'django.core.context_processors.request',
+    'students_account.students_app.context_processors.settings_proc'
 )
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
