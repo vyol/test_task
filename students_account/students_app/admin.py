@@ -1,5 +1,5 @@
 from django.contrib import admin
-from students_app.models import Grup, Student
+from students_app.models import Grup, MyLog, Student
 
 #class StudentInline(admin.TabularInline):
 #    model = Student
@@ -11,4 +11,5 @@ from students_app.models import Grup, Student
 #admin.site.register(Grup, GrupAdmin)
 admin.site.register(Grup)
 admin.site.register(Student)
+admin.site.register(MyLog)
 

@@ -58,12 +58,14 @@ def view_groups(request):
         form = GroupForm(request.POST)
         if form.is_valid():
             try:
+                inst = Grup.objects.get(pk=form.cleaned_data['pk'])
+                form = GroupForm(request.POST, instance=inst)
+                form.save()
+            except Grup.DoesNotExist:
                 form.validate_unique()
                 form.save()
             except (ValidationError, ValueError):
-                inst = Grup.objects.get(pk=request.POST['pk'])
-                form = GroupForm(request.POST, instance=inst)
-                form.save()
+                print 'ValidationError, ValueError'
             except Exception, e:
                 print e
             form = GroupForm()
@@ -83,14 +85,16 @@ def view_students(request, group_name):
         form = StudentForm(request.POST)
         if form.is_valid():
             try:
-                form.validate_unique()
-                form.save()
-            except ValidationError, e:
-                inst = Student.objects.get(pk=request.POST['pk'])
+                inst = Student.objects.get(pk=form.cleaned_data['pk'])
                 form = StudentForm(request.POST, instance=inst)
                 form.save()
-            except Exception, e:
-                print e
+            except Student.DoesNotExist:
+                form.validate_unique()
+                form.save()
+            except ValidationError:
+                print 'ValidationError'
+            #except Exception, e:
+            #    print e
             form = StudentForm()
         return render_to_response('students.html',
                               {'students':students, 'form':form},
