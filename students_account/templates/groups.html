@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load students_tags %}
 
 {% block extrascripts %}
 	<script>
@@ -43,7 +44,7 @@
 			<td>{{ g.captain }}</td>		
 			<td>{{ g.students_amount }}</td>	
 			<td><a href="javascript:void(0);" onClick="javascript:del_group(this);">&nbsp;del&nbsp;</a></td>						
-			<td><a href="javascript:void(0);" onClick="javascript:edit_group(this);">&nbsp;edit&nbsp;</a></td>					
+			<td><a href="javascript:void(0);" onClick="javascript:edit_group(this);">&nbsp;edit&nbsp;</a></td>		
 		</tr>
 	{% endfor %}
 	</table>
@@ -58,4 +59,7 @@
 		<button type="reset">reset</button>		
         <button type="submit">submit</button>
     </form>	
+	{% edit_list groups.1 students_app %}<br />
+	{% edit_list request.user auth %}<br />
+	{% edit_list groups.1.captain students_app %}
 {% endblock %}
