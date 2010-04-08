@@ -1,0 +1,46 @@
+﻿{% block extrascripts %}
+	{{ block.super }}
+	<script type="text/javascript">
+	$(document).ready(function () {
+		$.getJSON("../jqgrid/cfg/"+"StudentGrid/", function(data){
+			grid_config();
+    	});
+	});	
+	grid_config = function(){
+		$.getJSON("../jqgrid/cfg/"+"StudentGrid/", function(data){
+			data['onSelectRow'] = on_select_row;
+    	    $("#student_grid")
+        	    .jqGrid(data)
+            	.navGrid('#pager', 
+                	{add: true, edit: true, del: true, view: false},
+        	{closeOnEscape:true}, // edit options
+        	{}, // add options
+        	{}, // del options 
+        	{ multipleSearch:true, closeOnEscape:true }, // search options 
+        	{ jqModal:false, closeOnEscape:true} // view options 
+        	);
+    	});
+	}
+	var lastsel;
+	on_select_row = function(id){
+		if(id && id!==lastsel){
+			jQuery('#student_grid').jqGrid('restoreRow', lastsel);
+			jQuery('#student_grid').jqGrid('editRow',id, true, pickdates);
+			lastsel=id;
+		}
+	};
+	$(document).keypress(function(e) {
+		if(e.keyCode == 27) { 
+			jQuery('#student_grid').jqGrid('restoreRow', lastsel);
+		}
+	});
+	function pickdates(id){
+		jQuery("#"+id+"_birth_date","#student_grid").datepicker();
+	}
+	</script>
+{% endblock %}
+
+{% block content %}
+	<table id="student_grid" class="scroll"></table>
+	<div id="pager" class="scroll"></div>
+{% endblock %}

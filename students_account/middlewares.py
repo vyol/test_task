@@ -24,7 +24,8 @@ class StatsMiddleware(object):
                  'queries': queries_amount}
         out = "total time: %(total_time).5fs, queries: %(queries)d" % stats
         if response and response.content \
-            and response['Content-Type'].find('text/html') != -1:
+            and response['Content-Type'].find('text/html') != -1 \
+            and response.content.find('<body>') != -1:
             s = response.content
             regexp = re.compile(r'(?P<cmt><!--\s*STATS:(?P<fmt>.*?)-->)')
             match = regexp.search(s)

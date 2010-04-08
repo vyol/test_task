@@ -94,3 +94,10 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'students_account.students_app'
 )
+import logging
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s %(levelname)s \n%(module)s %(funcName)s %(message)s',
+    filename=os.path.join(PROJECT_DIR, 'students_app.log'),
+    filemode='w'
+)

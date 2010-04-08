@@ -14,7 +14,7 @@ class MyLog(models.Model):
 
 class Grup(models.Model):
     name = models.CharField(max_length=16, unique=True)
-    captain = models.ForeignKey('Student', related_name='captain',
+    student = models.ForeignKey('Student', related_name='student',
                                 null=True, blank=True)
 
     def __unicode__(self):
@@ -27,7 +27,7 @@ class Student(models.Model):
     patronymic = models.CharField(max_length=32)
     birth_date = models.DateField()
     student_card = models.CharField(max_length=16)
-    grup = models.ForeignKey(Grup)
+    grup = models.ForeignKey(Grup, related_name='grup')
 
     def __unicode__(self):
         return u'%s %s' % (self.surname, self.name)

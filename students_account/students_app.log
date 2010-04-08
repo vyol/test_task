@@ -1,0 +1,32 @@
+2010-04-08 13:55:08,280 DEBUG 
+views grid_config grid config GrupGrid
+2010-04-08 13:55:08,280 DEBUG 
+grids lookup_foreign_key_field Grup has no field named 'students_amount'
+2010-04-08 13:55:08,312 DEBUG 
+views grid_config grid config GrupGrid
+2010-04-08 13:55:08,312 DEBUG 
+grids lookup_foreign_key_field Grup has no field named 'students_amount'
+2010-04-08 13:55:08,405 DEBUG 
+views grid_handler grid handler GrupGrid
+2010-04-08 13:55:10,280 DEBUG 
+views grid_config grid config StudentGrid
+2010-04-08 13:55:10,375 DEBUG 
+views grid_handler grid handler StudentGrid
+2010-04-08 13:55:20,953 DEBUG 
+views grid_handler grid handler StudentGrid
+2010-04-08 14:32:35,421 DEBUG 
+views grid_config grid config StudentGrid
+2010-04-08 14:32:35,467 DEBUG 
+views grid_config grid config StudentGrid
+2010-04-08 14:32:35,562 DEBUG 
+views grid_handler grid handler StudentGrid
+2010-04-08 14:32:52,280 DEBUG 
+views grid_config grid config GrupGrid
+2010-04-08 14:32:52,280 DEBUG 
+grids lookup_foreign_key_field Grup has no field named 'students_amount'
+2010-04-08 14:32:52,312 DEBUG 
+views grid_config grid config GrupGrid
+2010-04-08 14:32:52,312 DEBUG 
+grids lookup_foreign_key_field Grup has no field named 'students_amount'
+2010-04-08 14:32:52,405 DEBUG 
+views grid_handler grid handler GrupGrid

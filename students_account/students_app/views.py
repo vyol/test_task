@@ -1,14 +1,15 @@
 # Create your views here.
+import logging
+import students_app.grids
 from django.contrib import auth
 from django.forms.util import ValidationError
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
 from django.db.models import Count
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from students_app.context_processors import settings_proc
 from students_app.models import Grup, Student
-from students_app.forms import GroupForm, StudentForm
-from students_app.utils.main_utils import is_authenticated
+from students_app.utils.main_utils import is_authenticated, class_for_name
 
 DEFAULT_START_PAGE = '../groups'
 ERROR_MESSAGE = "Please enter a correct username and password"
@@ -54,66 +55,89 @@ def display_login_form(request, error_message='', extra_context=None):
 @is_authenticated
 def view_groups(request):
     groups = Grup.objects.all().annotate(students_amount=Count('student'))
-    if request.method == 'POST' and request.POST:
-        form = GroupForm(request.POST)
-        if form.is_valid():
-            try:
-                inst = Grup.objects.get(pk=form.cleaned_data['pk'])
-                form = GroupForm(request.POST, instance=inst)
-                form.save()
-            except Grup.DoesNotExist:
-                form.validate_unique()
-                form.save()
-            except (ValidationError, ValueError):
-                print 'ValidationError, ValueError'
-            except Exception, e:
-                print e
-            form = GroupForm()
-        return render_to_response('groups.html',
-                              {'groups':groups, 'form':form},
-                              context_instance=RequestContext(request))
-    form = GroupForm()
-    return render_to_response('groups.html',
-                              {'groups':groups, 'form':form},
+    return render_to_response('groups.html', {'groups':groups},
                               context_instance=RequestContext(request))
 
 
 @is_authenticated
 def view_students(request, group_name):
-    students = Student.objects.filter(grup__name=group_name)
+    students = Student.objects.all()
+    return render_to_response('students.html', {'students':students},
+                              context_instance=RequestContext(request))
+
+@is_authenticated
+def edit_group(request):
+    """modifies or deletes Grup instance"""
     if request.method == 'POST' and request.POST:
-        form = StudentForm(request.POST)
-        if form.is_valid():
+        logging.debug(request.POST)
+        if request.POST.get('oper') and request.POST['oper'] == 'del':
             try:
-                inst = Student.objects.get(pk=form.cleaned_data['pk'])
-                form = StudentForm(request.POST, instance=inst)
-                form.save()
-            except Student.DoesNotExist:
-                form.validate_unique()
-                form.save()
-            except ValidationError:
-                print 'ValidationError'
-            #except Exception, e:
-            #    print e
-            form = StudentForm()
-        return render_to_response('students.html',
-                              {'students':students, 'form':form},
-                              context_instance=RequestContext(request))
-    form = StudentForm()
-    return render_to_response('students.html',
-                              {'students':students, 'form':form},
-                              context_instance=RequestContext(request))
+                Grup.objects.get(id=request.POST['id']).delete()
+            except Exception, ex:
+                logging.debug(ex)
+        elif request.POST.get('oper') and request.POST['oper'] == 'add':
+            instance = Grup()
+            instance.name = request.POST.get('name')
+            instance.student = Student.objects.get(id=request.POST.get('student'))
+            try:
+                instance.save()
+            except Exception, ex:
+                logging.debug(ex)
+        else:
+            try:
+                instance = Grup.objects.get(id=request.POST.get('id'))
+                instance.name = request.POST.get('name')
+                instance.student = Student.objects.get(id=request.POST.get('student'))
+                instance.save()
+            except Exception, ex:
+                logging.debug(ex)
+        return render_to_response('grid-groups.html',
+                                  context_instance=RequestContext(request))
+    return HttpResponseNotFound('invalid request')
 
 
 @is_authenticated
-def delete_student(request, student_pk):
-    student = Student.objects.get(pk=student_pk)
-    group_name = student.grup.name
-    Student.objects.get(pk=student_pk).delete()
-    return HttpResponseRedirect('../%s' % group_name)
+def edit_student(request):
+    """modifies or deletes Student instance"""
+    if request.method == 'POST' and request.POST:
+        logging.debug(request.POST)
+        instance = None
+        if request.POST.get('oper') and request.POST['oper'] == 'del':
+            try:
+                Student.objects.get(id=request.POST['id']).delete()
+            except Exception, ex:
+                logging.debug(ex)
+        elif request.POST.get('oper') and request.POST['oper'] == 'add':
+            instance = Student()
+        else:
+            try:
+                instance = Student.objects.get(id=request.POST.get('id'))
+            except Exception, ex:
+                logging.debug(ex)
+        try:
+            instance.surname = request.POST.get('surname')
+            instance.name = request.POST.get('name')
+            instance.patronymic = request.POST.get('patronymic')
+            instance.birth_date = request.POST.get('birth_date')
+            instance.student_card = request.POST.get('student_card')
+            instance.grup = Grup.objects.get(id=request.POST.get('grup'))
+            instance.save()
+        except Exception, ex:
+            logging.debug(ex)
+
+        return render_to_response('grid-students.html',
+                                  context_instance=RequestContext(request))
+    return HttpResponseNotFound('invalid request')
 
 
-@is_authenticated
-def delete_group(request, group_pk):
-    Grup.objects.get(pk=group_pk).delete()
-    return HttpResponseRedirect('../')
+def grid_handler(request, grid_name):
+    """ handles pagination, sorting and searching"""
+    logging.debug('grid handler %s' % grid_name)
+    grid = class_for_name(grid_name, 'students_app.grids')()
+    return HttpResponse(grid.get_json(request), mimetype="application/json")
+
+def grid_config(request, grid_name):
+    """build a config suitable to pass to jqgrid constructor"""
+    logging.debug('grid config %s' % grid_name)
+    grid = class_for_name(grid_name, 'students_app.grids')()
+    return HttpResponse(grid.get_config(), mimetype="application/json")

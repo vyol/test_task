@@ -1,8 +1,20 @@
 <html>
 <head>
-	{% block extrascripts %}{% endblock %}
 	{% block extrastyles %}{% endblock %}
-	<link rel="stylesheet" type="text/css" href="../site_media/css/main.css"/>	
+	<!--  jquery custom  UI-->
+	<link type="text/css" href="../site_media/css/custom-theme/jquery-ui-1.7.2.custom.css" rel="stylesheet"/>	
+	<!-- jqGrid-->
+	<link rel="stylesheet" type="text/css" media="screen" href="../site_media/css/jqGridGitHub/ui.jqgrid.css"/>
+	<link rel="stylesheet" type="text/css" media="screen" href="../site_media/css/jqGridGitHub/jquery.searchFilter.css"/>
+	
+	<link rel="stylesheet" type="text/css" href="../site_media/css/main.css"/>
+	
+	<!--  jquery custom  UI-->
+	<script type="text/javascript" src="../site_media/js/jqGridGitHub/jquery.js"></script>	
+	<script type="text/javascript" src="../site_media/js/jquery-ui-1.7.2.custom.min.js"></script>	
+	<script type="text/javascript" src="../site_media/js/jqGridGitHub/jquery.jqGrid.js"></script> 	
+	<script type="text/javascript" src="../site_media/js/ui.datepicker-uk.js"></script>		
+	{% block extrascripts %}{% endblock %}
 </head>
 <body>
 	{%if not is_login_page %}
